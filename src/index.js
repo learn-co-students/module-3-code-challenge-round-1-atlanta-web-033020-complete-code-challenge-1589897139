@@ -37,7 +37,21 @@ function renderImage(image){
       likeImage(image, imgSpan)
   })
   const form = document.getElementById('comment_form')
-  form.addEventListener('input', submitComment)
+  form.addEventListener('submit', (e) => {
+    submitComment(e, image)
+  })
+  renderComments(image)
+}
+
+function renderComments(image){
+  image.comments.forEach((comment) => renderComment(comment.content))
+}
+
+function renderComment(comment){
+  parent = document.getElementById('comments')
+  commentLi = document.createElement('li')
+  commentLi.innerText = comment
+  parent.appendChild(commentLi) 
 }
 
 function likeImage(image, imgSpan){
@@ -56,11 +70,25 @@ function likeImage(image, imgSpan){
   .then(error => console.log(error))
 }
 
-function submitComment(input){
-  console.log(input)
-  debugger;
-  event.preventDefault()
-  const imageUl = document.createElement('ul')
-  imageUl.innerText = input.target.value
-
+function submitComment(e, image){
+  e.preventDefault()
+  // const parent = document.getElementById('comments')
+  // const imageLi = document.createElement('li')
+  // imageLi.innerText = e.target.querySelector('input').value
+  // parent.appendChild(imageLi) 
+  renderComment(e.target.querySelector('input').value)
+  let commentObj = {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      image_id: imageId,
+      content: e.target.querySelector('input').value
+    })
+  }
+  fetch(commentsURL, commentObj)
+  .then(res => res.json())
+  .then(res => console.log(res))
 }
