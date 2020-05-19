@@ -4,11 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 let imageId = 5259
-
 const imageURL = `https://randopic.herokuapp.com/images/${imageId}`
-
 const likeURL = `https://randopic.herokuapp.com/likes/`
-
 const commentsURL = `https://randopic.herokuapp.com/comments/`
 
 function init(){
@@ -67,15 +64,11 @@ function likeImage(image, imgSpan){
     })
   })
   .then(res => res.json())
-  .then(error => console.log(error))
+  .then(res => console.log(res))
 }
 
 function submitComment(e, image){
   e.preventDefault()
-  // const parent = document.getElementById('comments')
-  // const imageLi = document.createElement('li')
-  // imageLi.innerText = e.target.querySelector('input').value
-  // parent.appendChild(imageLi) 
   renderComment(e.target.querySelector('input').value)
   let commentObj = {
     method: 'POST',
